@@ -1,49 +1,71 @@
-import { Play } from "phosphor-react";
-import { CountdownContainer, FormContainer, HomeContainer, MinutesAmountInput, Separator, StartCountDownButton, TaskInput } from "./styles";
+import { Play } from 'phosphor-react'
+import {
+  CountdownContainer,
+  FormContainer,
+  HomeContainer,
+  MinutesAmountInput,
+  Separator,
+  StartCountDownButton,
+  TaskInput,
+} from './styles'
+import { useForm } from 'react-hook-form'
 
 export function Home() {
-    return (
-        <HomeContainer>
-            <form action="">
-                <FormContainer>
-                    <label htmlFor="task">Vou trabalhar em</label>
-                    <TaskInput id="task" list={'task-suggestion'} type="text" placeholder="Dê um nome para o seu projeto" />
-                    <datalist id={'task-suggestion'}>
-                        <option value={"Projeto 1"} />
-                        <option value={"Projeto 2"} />
-                        <option value={"Projeto 3"} />
-                    </datalist>
+  const { register, handleSubmit, watch } = useForm()
 
-                    <label htmlFor="minutesAmount">durante</label>
-                    <MinutesAmountInput
-                        id="minutesAmount"
-                        type="number"
-                        placeholder="00"
-                        step={5}
-                        min={5}
-                        max={60} />
+  function handleCreateNewCycle(data: unknown) {
+    console.log(data)
+  }
 
-                    <span>minutos.</span>
+  const task = watch('task')
+  const isSubmitDisabled = !task
 
-                </FormContainer>
+  return (
+    <HomeContainer>
+      <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
+        <FormContainer>
+          <label htmlFor="task">Vou trabalhar em</label>
+          <TaskInput
+            id="task"
+            list={'task-suggestion'}
+            type="text"
+            placeholder="Dê um nome para o seu projeto"
+            {...register('task')}
+          />
 
-                <CountdownContainer>
-                    <span>0</span>
-                    <span>0</span>
-                    <Separator>:</Separator>
-                    <span>0</span>
-                    <span>0</span>
-                </CountdownContainer>
+          <datalist id={'task-suggestion'}>
+            <option value={'Projeto 1'} />
+            <option value={'Projeto 2'} />
+            <option value={'Projeto 3'} />
+          </datalist>
 
-                <StartCountDownButton disabled type="submit">
-                    <Play size={24} />
-                    Começar
-                </StartCountDownButton>
+          <label htmlFor="minutesAmount">durante</label>
+          <MinutesAmountInput
+            id="minutesAmount"
+            type="number"
+            placeholder="00"
+            step={5}
+            min={5}
+            max={60}
+            {...register('minutesAmount', { valueAsNumber: true })}
+          />
 
+          <span>minutos.</span>
+        </FormContainer>
 
-            </form>
+        <CountdownContainer>
+          <span>0</span>
+          <span>0</span>
+          <Separator>:</Separator>
+          <span>0</span>
+          <span>0</span>
+        </CountdownContainer>
 
-
-        </HomeContainer>
-    )
+        <StartCountDownButton disabled={isSubmitDisabled} type="submit">
+          <Play size={24} />
+          Começar
+        </StartCountDownButton>
+      </form>
+    </HomeContainer>
+  )
 }
