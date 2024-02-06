@@ -46,7 +46,7 @@ export function CycleContextProvider({ children }: CycleContextProviderProps) {
     setCycles((state) =>
       state.map((cycle) => {
         if (cycle.id === activeCycleId) {
-          return { ...cycle, interruptedDate: new Date() }
+          return { ...cycle, finishedDate: new Date() }
         } else {
           return cycle
         }
@@ -65,12 +65,10 @@ export function CycleContextProvider({ children }: CycleContextProviderProps) {
 
     setCycles((state) => [...state, newCycle])
     setActiveCycleId(id)
-    // reset()
     setAmountSecondsPassed(0)
   }
 
   function interruptCurrentCycle() {
-    setActiveCycleId(null)
     setCycles((state) =>
       state.map((cycle) => {
         if (cycle.id === activeCycleId) {
@@ -80,6 +78,8 @@ export function CycleContextProvider({ children }: CycleContextProviderProps) {
         }
       }),
     )
+
+    setActiveCycleId(null)
   }
 
   return (
